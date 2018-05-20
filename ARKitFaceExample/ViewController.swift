@@ -17,6 +17,119 @@ class ViewController: UIViewController, ARSessionDelegate {
 
     @IBOutlet weak var blurView: UIVisualEffectView!
 
+    var location = CGPoint(x: 187.0, y: 406.0)
+    var clicklocation = CGPoint(x: 187.0, y: 406.0)
+    var y = 0.0
+    var x = 0.0
+    var prey = 0.0
+    var prex = 0.0
+    @IBOutlet var cursor: UIImageView!
+    @IBOutlet weak var clickPlace: UIImageView!
+    
+    
+    func click(to1: Float, to2:Float) {
+        x = Double((to1 + 0.1)*375/0.2)
+        y = Double(812-((to2 + 0.1)*812/0.26))
+        if y < 0 {
+            y = 0
+        }
+        else if y > 812 {
+            y = 812
+        }
+        else{
+            clicklocation.y = CGFloat(y)
+        }
+        
+        if x < 0 {
+            x = 0
+        }
+        else if x > 375 {
+            x = 375
+        }
+        else{
+            clicklocation.x = CGFloat(x)
+        }
+        
+        
+        clicklocation.x = CGFloat(x)
+        clicklocation.y = CGFloat(y)
+        
+        clickPlace.center = clicklocation
+    }
+    func move(to1: Float, to2:Float){
+        //to1 -0.1~0.1
+        //to2 -0.1~0.15
+        x = Double((to1 + 0.1)*375/0.2)
+        y = Double(812-((to2 + 0.1)*812/0.26))
+        
+        
+        if y < 0 {
+            y = 0
+        }
+        else if y > 812 {
+            y = 812
+        }
+        else{
+            location.y = CGFloat(y)
+        }
+        
+        if x < 0 {
+            x = 0
+        }
+        else if x > 375 {
+            x = 375
+        }
+        else{
+            location.x = CGFloat(x)
+        }
+    
+        
+        location.x = CGFloat(x)
+        location.y = CGFloat(y)
+        
+        cursor.center = location
+    }
+    func movevertical(to: Float){
+        //-0.3~0.2 map 0~812
+        prey = Double(location.y)
+        y = Double(((to + 0.3) * 812)/0.5)
+        if y < 0 {
+            y = 0
+        }
+        else if y > 812 {
+            y = 812
+        }
+        if abs(prey - y) <= 12{
+            
+        }
+        else{
+            location.y = CGFloat(y)
+        }
+        
+        cursor.center = location
+        //print(cursor.center)
+    }
+    func movehorizontal(to: Float){
+        //-0.35~0.35 map 0~375
+        prex = Double(location.x)
+        x = Double(375 - ((to + 0.35) * 375 / 0.7))
+        if x < 0 {
+            x = 0
+        }
+        else if x > 375 {
+            x = 375
+        }
+        if abs(prex - x) <= 7{
+            
+        }
+        else{
+            location.x = CGFloat(x)
+        }
+        location.x = CGFloat(x)
+        cursor.center = location
+        
+    }
+    
     lazy var statusViewController: StatusViewController = {
         return childViewControllers.lazy.flatMap({ $0 as? StatusViewController }).first!
     }()
@@ -44,11 +157,15 @@ class ViewController: UIViewController, ARSessionDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        cursor.center = CGPoint(x: 187.0, y: 406.0)
+        print(cursor.center)
+        
         sceneView.delegate = contentUpdater
         sceneView.session.delegate = self
         sceneView.automaticallyUpdatesLighting = true
         
         createFaceGeometry()
+        
 
         // Set the initial face content, if any.
         contentUpdater.virtualFaceNode = nodeForContentType[selectedVirtualContent]
@@ -85,12 +202,14 @@ class ViewController: UIViewController, ARSessionDelegate {
         let device = sceneView.device!
         let maskGeometry = ARSCNFaceGeometry(device: device)!
         let glassesGeometry = ARSCNFaceGeometry(device: device)!
-        
+
         nodeForContentType = [
             .faceGeometry: Mask(geometry: maskGeometry),
             .overlayModel: GlassesOverlay(geometry: glassesGeometry),
             .blendShapeModel: RobotHead()
         ]
+        let myMask = nodeForContentType[.faceGeometry] as! Mask
+        myMask.viewController = self
     }
     
     // MARK: - ARSessionDelegate

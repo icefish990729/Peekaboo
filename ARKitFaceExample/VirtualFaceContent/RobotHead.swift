@@ -50,5 +50,6 @@ class RobotHead: SCNReferenceNode, VirtualFaceContent {
     /// - Tag: ARFaceGeometryBlendShapes
     func update(withFaceAnchor faceAnchor: ARFaceAnchor) {
         blendShapes = faceAnchor.blendShapes
+        print(faceAnchor.geometry)
     }
 }
