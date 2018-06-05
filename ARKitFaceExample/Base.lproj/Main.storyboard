@@ -55,7 +55,7 @@
                                 </connections>
                             </containerView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2oV-vo-EXP">
-                                <rect key="frame" x="167" y="386" width="40" height="40"/>
+                                <rect key="frame" x="167" y="386" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </imageView>
@@ -216,7 +216,7 @@ Shipping apps must support devices without face tracking. In your app, offer UI 
                                         <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OdU-mV-Ind">
                                             <rect key="frame" x="9" y="16.666666666666668" width="324" height="35.666666666666657"/>
                                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="LRp-3z-3QL">
-                                                <rect key="frame" x="0.0" y="0.0" width="324" height="35"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="324" height="35.666666666666657"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="am7-Cy-ndy">

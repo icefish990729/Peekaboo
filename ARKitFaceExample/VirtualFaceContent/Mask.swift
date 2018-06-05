@@ -140,15 +140,17 @@ class Mask: SCNNode, VirtualFaceContent {
                 self.buffer?.append(vectorY * scale)
             }
         }
-        preX = newX
-        preY = newY
         
-        if(i%1 == 0){
-            DispatchQueue.main.async{
-                self.viewController.move(to1: newX, to2: newY)
-            }
+        let alpha: Float = 0.7
+        let updateX = (1 - alpha) * newX + (alpha) * self.preX
+        let updateY = (1 - alpha) * newY + (alpha) * self.preY
+        DispatchQueue.main.async{
+            self.viewController.move(to1: updateX, to2: updateY)
         }
         
+        // update newX and newY
+        preX = updateX
+        preY = updateY
         i += 1
     }
 }
