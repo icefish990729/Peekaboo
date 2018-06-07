@@ -63,13 +63,13 @@ class Mask: SCNNode, VirtualFaceContent {
         let newX = nosePos.x
         let newY = nosePos.y
         
-        let alpha: Float = 0.7
+        let alpha: Float = 0.8
         let updateX = (1 - alpha) * newX + (alpha) * self.preX
         let updateY = (1 - alpha) * newY + (alpha) * self.preY
         DispatchQueue.main.async{
             self.viewController.move(
                 to1: updateX, to2: updateY,
-                x1: -0.05, x2: 0.05, y1: 0.1, y2: 0.16
+                x1: -0.038, x2: 0.033, y1: 0.13, y2: 0.19
             )
         }
         // update newX and newY
@@ -94,16 +94,18 @@ class Mask: SCNNode, VirtualFaceContent {
         let newX = facePos.x + vector.x * t
         let newY = facePos.y + vector.y * t
         
+        // print(newX, newY)
+        
         vectorX = (newX - preX)
         vectorY = (newY - preY)
         
-        let alpha: Float = 0.7
+        let alpha: Float = 0.8
         let updateX = (1 - alpha) * newX + (alpha) * self.preX
         let updateY = (1 - alpha) * newY + (alpha) * self.preY
         DispatchQueue.main.async{
             self.viewController.move(
                 to1: updateX, to2: updateY,
-                x1: -0.1, x2: 0.1, y1: -0.1, y2: 0.15
+                x1: -0.24, x2: 0.16, y1: 0.003, y2: 0.24
             )
         }
         
@@ -133,10 +135,13 @@ class Mask: SCNNode, VirtualFaceContent {
         let newX = facePos.x + vector.x * t
         let newY = facePos.y + vector.y * t
         
-        print(newX, newY)
+        //print(newX, newY)
         
         vectorX = (newX - preX)
         vectorY = (newY - preY)
+        
+        //print(vectorX, vectorY)
+        
         
         let alpha: Float = 0.8
         let updateX = (1 - alpha) * newX + (alpha) * self.preX
@@ -144,7 +149,7 @@ class Mask: SCNNode, VirtualFaceContent {
         DispatchQueue.main.async{
             self.viewController.move(
                 to1: updateX, to2: updateY,
-                x1: -0.12, x2: 0.12, y1: -0.08, y2: 0.25
+                x1: -0.12, x2: 0.12, y1: 0.03, y2: 0.25
             )
         }
         
