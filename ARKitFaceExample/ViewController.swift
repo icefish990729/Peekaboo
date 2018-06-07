@@ -42,9 +42,11 @@ class ViewController: UIViewController, ARSessionDelegate {
     @IBOutlet weak var Button24: UIButton!
     @IBOutlet weak var Button25: UIButton!
     @IBOutlet weak var Button28: UIButton!
+    @IBOutlet weak var Button26: UIButton!
+    @IBOutlet weak var Button27: UIButton!
     @IBOutlet weak var StartButton: UIButton!
     
-    
+    var buttonArray : Array<UIButton> = []
     
     var location = CGPoint(x: 187.0, y: 406.0)
     var clicklocation = CGPoint(x: 187.0, y: 406.0)
@@ -52,7 +54,14 @@ class ViewController: UIViewController, ARSessionDelegate {
     var x = 0.0
     var prey = 0.0
     var prex = 0.0
-    var taskorder = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,28]
+    //var taskorder = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,28]
+    var taskorder = [1,4,25,28]
+    var noworder = 0
+    var state = 0
+    var timer = Timer()
+    var counter = 0.0
+    var time : Array<Double> = []
+    var missData : Array<Int> = []
     @IBOutlet var cursor: UIImageView!
     @IBOutlet weak var clickPlace: UIImageView!
     
@@ -133,122 +142,58 @@ class ViewController: UIViewController, ARSessionDelegate {
             UIKeyCommand(input: " ",
                          modifierFlags: [],
                          action: #selector(self.clickbutton),
-                         discoverabilityTitle: "Close app")
+                         discoverabilityTitle: "Click"),
+            UIKeyCommand(input: "E",
+                         modifierFlags: [],
+                         action: #selector(self.end),
+                         discoverabilityTitle: "Task end")
         ]
     }
-    
+    @objc func end(){
+        print(time)
+        print(missData)
+    }
+    @objc func UpdateTimer() {
+        counter = counter + 0.001
+    }
     @objc func clickbutton() {
-        print(x,y)
-        if(x >= 36 && x <= 80){
-            if(y >= 52 && y <= 96){
-                Button1.backgroundColor? = .green
-                print("hit")
+        //print(x,y)
+        let r = 22.0
+        if state == 0{
+            if( distance(p: x, b: Double(StartButton.center.x)) > r || distance(p: y, b: Double(StartButton.center.y)) > r ){
+                //print("out")
+            }else{
+                state = 1
+                //print("in")
+                StartButton.isHidden = true
+                buttonArray[taskorder[noworder]-1].isHidden = false
+                timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(UpdateTimer), userInfo: nil, repeats: true)
             }
-            else if(y >= 161 && y <= 205){
-                Button5.backgroundColor? = .green
-            }
-            else if(y >= 270 && y <= 314){
-                Button9.backgroundColor? = .green
-            }
-            else if(y >= 379 && y <= 423){
-                Button13.backgroundColor? = .green
-            }
-            else if(y >= 488 && y <= 532){
-                Button17.backgroundColor? = .green
-            }
-            else if(y >= 597 && y <= 641){
-                Button21.backgroundColor? = .green
-            }
-            else if(y >= 706 && y <= 750){
-                Button25.backgroundColor? = .green
-            }
-            else{
-                print("missy")
-            }
+            
         }
-        else if(x >= 122 && x <= 166){
-            if(y >= 52 && y <= 96){
-                Button2.backgroundColor? = .green
-                print("hit")
-            }
-            else if(y >= 161 && y <= 205){
-                Button6.backgroundColor? = .green
-            }
-            else if(y >= 270 && y <= 314){
-                Button10.backgroundColor? = .green
-            }
-            else if(y >= 379 && y <= 423){
-                Button14.backgroundColor? = .green
-            }
-            else if(y >= 488 && y <= 532){
-                Button18.backgroundColor? = .green
-            }
-            else if(y >= 597 && y <= 641){
-                Button22.backgroundColor? = .green
-            }
-            else if(y >= 706 && y <= 750){
-                //Button26.backgroundColor? = .green
+        else if(state == 1){
+            if(distance(p: x, b: Double(buttonArray[taskorder[noworder]-1].center.x)) > r || distance(p: y, b: Double(buttonArray[taskorder[noworder]-1].center.y)) > r){
+                print("miss")
+                missData.append(taskorder[noworder])
             }
             else{
-                print("missy")
-            }
-        }
-        else if(x >= 201 && x <= 245){
-            if(y >= 52 && y <= 96){
-                Button3.backgroundColor? = .green
-                print("hit")
-            }
-            else if(y >= 161 && y <= 205){
-                Button7.backgroundColor? = .green
-            }
-            else if(y >= 270 && y <= 314){
-                Button11.backgroundColor? = .green
-            }
-            else if(y >= 379 && y <= 423){
-                Button15.backgroundColor? = .green
-            }
-            else if(y >= 488 && y <= 532){
-                Button19.backgroundColor? = .green
-            }
-            else if(y >= 597 && y <= 641){
-                Button23.backgroundColor? = .green
-            }
-            else if(y >= 706 && y <= 750){
-                //Button27.backgroundColor? = .green
-            }
-            else{
-                print("missy")
-            }
-        }
-        else if(x >= 296 && x <= 340){
-            if(y >= 52 && y <= 96){
-                Button4.backgroundColor? = .green
-                print("hit")
-            }
-            else if(y >= 161 && y <= 205){
-                Button8.backgroundColor? = .green
-            }
-            else if(y >= 270 && y <= 314){
-                Button12.backgroundColor? = .green
-            }
-            else if(y >= 379 && y <= 423){
-                Button16.backgroundColor? = .green
-            }
-            else if(y >= 488 && y <= 532){
-                Button20.backgroundColor? = .green
-            }
-            else if(y >= 597 && y <= 641){
-                Button24.backgroundColor? = .green
-            }
-            else if(y >= 706 && y <= 750){
-                Button28.backgroundColor? = .green
-            }
-            else{
-                print("missy")
+                //print("hit")
+                timer.invalidate()
+                time.append(counter)
+                counter = 0.0
+                StartButton.isHidden = false
+                buttonArray[taskorder[noworder]-1].isHidden = true
+                noworder += 1
+                state = 0
+                
             }
         }
         else{
-            print("miss")
+            
+        }
+        if noworder == taskorder.count{
+            state = 2
+            StartButton.setTitle("END", for: .normal)
         }
         
     }
@@ -277,9 +222,18 @@ class ViewController: UIViewController, ARSessionDelegate {
         return dis
     }
     func taskStart() {
-        let r = 22.0
-        
-        if( distance(p: x, b: Double(StartButton.center.x)) > r || distance(p: y, b: Double(StartButton.center.y)) > r ){
+        for i in taskorder{
+            let r = 22.0
+            if state == 0{
+                if( distance(p: x, b: Double(StartButton.center.x)) > r || distance(p: y, b: Double(StartButton.center.y)) > r ){
+                    print("out")
+                }else{
+                    state = 1
+                    print("in")
+                    StartButton.isHidden = true
+                    buttonArray[i-1].isHidden = false
+                }
+            }
             
         }
     }
@@ -301,6 +255,37 @@ class ViewController: UIViewController, ARSessionDelegate {
         sceneView.delegate = contentUpdater
         sceneView.session.delegate = self
         sceneView.automaticallyUpdatesLighting = true
+        
+        buttonArray.append(Button1)
+        buttonArray.append(Button2)
+        buttonArray.append(Button3)
+        buttonArray.append(Button4)
+        buttonArray.append(Button5)
+        buttonArray.append(Button6)
+        buttonArray.append(Button7)
+        buttonArray.append(Button8)
+        buttonArray.append(Button9)
+        buttonArray.append(Button10)
+        buttonArray.append(Button11)
+        buttonArray.append(Button12)
+        buttonArray.append(Button13)
+        buttonArray.append(Button14)
+        buttonArray.append(Button15)
+        buttonArray.append(Button16)
+        buttonArray.append(Button17)
+        buttonArray.append(Button18)
+        buttonArray.append(Button19)
+        buttonArray.append(Button20)
+        buttonArray.append(Button21)
+        buttonArray.append(Button22)
+        buttonArray.append(Button23)
+        buttonArray.append(Button24)
+        buttonArray.append(Button25)
+        buttonArray.append(Button26)
+        buttonArray.append(Button27)
+        buttonArray.append(Button28)
+        
+        
         
         createFaceGeometry()
         
