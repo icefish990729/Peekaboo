@@ -159,8 +159,9 @@ class ViewController: UIViewController, ARSessionDelegate {
     @objc func clickbutton() {
         //print(x,y)
         let r = 22.0
+        let alpha = 15.0
         if state == 0{
-            if( distance(p: x, b: Double(StartButton.center.x)) > r || distance(p: y, b: Double(StartButton.center.y)) > r ){
+            if( distance(p: x-alpha, b: Double(StartButton.center.x)) > r || distance(p: y-alpha, b: Double(StartButton.center.y)) > r ){
                 //print("out")
             }else{
                 state = 1
@@ -172,7 +173,7 @@ class ViewController: UIViewController, ARSessionDelegate {
             
         }
         else if(state == 1){
-            if(distance(p: x, b: Double(buttonArray[taskorder[noworder]-1].center.x)) > r || distance(p: y, b: Double(buttonArray[taskorder[noworder]-1].center.y)) > r){
+            if(distance(p: x-alpha, b: Double(buttonArray[taskorder[noworder]-1].center.x)) > r || distance(p: y-alpha, b: Double(buttonArray[taskorder[noworder]-1].center.y)) > r){
                 print("miss")
                 missData.append(taskorder[noworder])
             }
@@ -194,6 +195,8 @@ class ViewController: UIViewController, ARSessionDelegate {
         if noworder == taskorder.count{
             state = 2
             StartButton.setTitle("END", for: .normal)
+            print(time)
+            print(missData)
         }
         
     }
@@ -244,11 +247,15 @@ class ViewController: UIViewController, ARSessionDelegate {
         
         cursor.center = CGPoint(x: 187.0, y: 406.0)
         print(cursor.center)
-        cursor.layer.borderWidth = 1
+        /*cursor.layer.borderWidth = 1
         cursor.layer.masksToBounds = false
         cursor.layer.borderColor = UIColor.black.cgColor
         cursor.layer.cornerRadius = cursor.frame.height/2
         cursor.clipsToBounds = true
+        */
+        let yourImage: UIImage = UIImage(named: "Cursor.png")!
+        cursor.image = yourImage
+        
         StartButton.layer.borderWidth = 1
         StartButton.layer.borderColor = UIColor.black.cgColor
         
