@@ -11,9 +11,10 @@ import UIKit
 
 class Mask: SCNNode, VirtualFaceContent {
     
+    var cursorMovingType = -1
     var faceOrigin: SCNNode?
     var sampleVector: Array<Array<Float>>?
-    init(geometry: ARSCNFaceGeometry) {
+    init(geometry: ARSCNFaceGeometry, movingType: Int) {
         let material = geometry.firstMaterial!
         
         material.diffuse.contents = UIColor.lightGray
@@ -21,11 +22,11 @@ class Mask: SCNNode, VirtualFaceContent {
         
         super.init()
         self.geometry = geometry
+        self.cursorMovingType = movingType
         
         faceOrigin = loadedContentForAsset(named: "coordinateOrigin")
         addChildNode(faceOrigin!)
         faceOrigin?.position.z = 0.05;
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -45,8 +46,9 @@ class Mask: SCNNode, VirtualFaceContent {
     
     
     var viewController: ViewController!
-    /// - Tag: SCNFaceGeometryUpdate
-    func update(withFaceAnchor anchor: ARFaceAnchor) {
+    
+    func maskDirectMapping(anchor: ARFaceAnchor) {
+        faceOrigin?.position.y = 0.0
         let faceGeometry = geometry as! ARSCNFaceGeometry
         faceGeometry.update(from: anchor.geometry)
         let nosePos: SCNVector3 = faceOrigin!.worldPosition
@@ -58,29 +60,108 @@ class Mask: SCNNode, VirtualFaceContent {
         )
         
         /* Calculate the fromula */
-        
-        
-        let t = (-facePos.z)/vector.z
-        let newX = facePos.x + vector.x * t
-        let newY = facePos.y + vector.y * t
-        let newZ = 0
-        
-        vectorX = (newX - preX)
-        vectorY = (newY - preY)
-        
-        //print(newX, newY, "/",preX, preY, "/",vectorX, vectorY)
-        //print(vectorX, vectorY)
+        let newX = nosePos.x
+        let newY = nosePos.y
         
         let alpha: Float = 0.7
         let updateX = (1 - alpha) * newX + (alpha) * self.preX
         let updateY = (1 - alpha) * newY + (alpha) * self.preY
         DispatchQueue.main.async{
-            self.viewController.move(to1: updateX, to2: updateY)
+            self.viewController.move(
+                to1: updateX, to2: updateY,
+                x1: -0.05, x2: 0.05, y1: 0.1, y2: 0.16
+            )
+        }
+        // update newX and newY
+        preX = updateX
+        preY = updateY
+        i += 1
+    }
+    
+    func cursorRayMapping(anchor: ARFaceAnchor) {
+        faceOrigin?.position.y = 0.0
+        let faceGeometry = geometry as! ARSCNFaceGeometry
+        faceGeometry.update(from: anchor.geometry)
+        let nosePos: SCNVector3 = faceOrigin!.worldPosition
+        let facePos: SCNVector3 = self.worldPosition
+        let vector: SCNVector3 = SCNVector3(
+            nosePos.x - facePos.x,
+            nosePos.y - facePos.y,
+            nosePos.z - facePos.z
+        )
+        /* Calculate the fromula */
+        let t = (-facePos.z) / vector.z
+        let newX = facePos.x + vector.x * t
+        let newY = facePos.y + vector.y * t
+        
+        vectorX = (newX - preX)
+        vectorY = (newY - preY)
+        
+        let alpha: Float = 0.7
+        let updateX = (1 - alpha) * newX + (alpha) * self.preX
+        let updateY = (1 - alpha) * newY + (alpha) * self.preY
+        DispatchQueue.main.async{
+            self.viewController.move(
+                to1: updateX, to2: updateY,
+                x1: -0.1, x2: 0.1, y1: -0.1, y2: 0.15
+            )
         }
         
         // update newX and newY
         preX = updateX
         preY = updateY
         i += 1
+    }
+    
+    func cursorSpeedMapping(anchor: ARFaceAnchor) {
+        faceOrigin?.position.y = 0.025
+        
+        let faceGeometry = geometry as! ARSCNFaceGeometry
+        faceGeometry.update(from: anchor.geometry)
+        let nosePos: SCNVector3 = faceOrigin!.worldPosition
+        var facePos: SCNVector3 = self.worldPosition
+        facePos.y += 0.025
+        
+        let vector: SCNVector3 = SCNVector3(
+            nosePos.x - facePos.x,
+            nosePos.y - facePos.y,
+            nosePos.z - facePos.z
+        )
+        
+        /* Calculate the fromula */
+        let t = (-facePos.z) / vector.z
+        let newX = facePos.x + vector.x * t
+        let newY = facePos.y + vector.y * t
+        
+        print(newX, newY)
+        
+        vectorX = (newX - preX)
+        vectorY = (newY - preY)
+        
+        let alpha: Float = 0.8
+        let updateX = (1 - alpha) * newX + (alpha) * self.preX
+        let updateY = (1 - alpha) * newY + (alpha) * self.preY
+        DispatchQueue.main.async{
+            self.viewController.move(
+                to1: updateX, to2: updateY,
+                x1: -0.12, x2: 0.12, y1: -0.08, y2: 0.25
+            )
+        }
+        
+        // update newX and newY
+        preX = updateX
+        preY = updateY
+        i += 1
+    }
+    
+    /// - Tag: SCNFaceGeometryUpdate
+    func update(withFaceAnchor anchor: ARFaceAnchor) {
+        if self.cursorMovingType == 0 {
+            maskDirectMapping(anchor: anchor)
+        } else if self.cursorMovingType == 1 {
+            cursorRayMapping(anchor: anchor)
+        } else {
+            cursorSpeedMapping(anchor: anchor)
+        }
     }
 }

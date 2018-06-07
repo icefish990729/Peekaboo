@@ -86,30 +86,27 @@ class ViewController: UIViewController, ARSessionDelegate {
         
         clickPlace.center = clicklocation
     }
-    func move(to1: Float, to2:Float){
+    func move(to1: Float, to2:Float, x1: Float, x2: Float, y1: Float, y2: Float){
         //to1 -0.1~0.1
         //to2 -0.1~0.15
-        x = Double((to1 + 0.1)*375/0.2)
-        y = Double(812-((to2 + 0.1)*812/0.26))
+        
+        x = Double((to1 - x1)*375/(x2 - x1))
+        y = Double(812-((to2 - y1)*812/(y2 - y1)))
         
         
         if y < 0 {
             y = 0
-        }
-        else if y > 812 {
+        } else if y > 812 {
             y = 812
-        }
-        else{
+        } else{
             location.y = CGFloat(y)
         }
         
         if x < 0 {
             x = 0
-        }
-        else if x > 375 {
+        } else if x > 375 {
             x = 375
-        }
-        else{
+        } else{
             location.x = CGFloat(x)
         }
     
@@ -345,11 +342,18 @@ class ViewController: UIViewController, ARSessionDelegate {
         let glassesGeometry = ARSCNFaceGeometry(device: device)!
 
         nodeForContentType = [
-            .faceGeometry: Mask(geometry: maskGeometry),
-            .overlayModel: GlassesOverlay(geometry: glassesGeometry),
-            .blendShapeModel: RobotHead()
+            .faceGeometry: Mask(geometry: maskGeometry, movingType: 0),
+            .overlayModel: Mask(geometry: maskGeometry, movingType: 1),
+            .blendShapeModel: Mask(geometry: maskGeometry, movingType: 2)
         ]
-        let myMask = nodeForContentType[.faceGeometry] as! Mask
+        
+        var myMask = nodeForContentType[.faceGeometry] as! Mask
+        myMask.viewController = self
+        
+        myMask = nodeForContentType[.overlayModel] as! Mask
+        myMask.viewController = self
+        
+        myMask = nodeForContentType[.blendShapeModel] as! Mask
         myMask.viewController = self
     }
     
