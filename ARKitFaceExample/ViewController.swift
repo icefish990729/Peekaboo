@@ -16,13 +16,43 @@ class ViewController: UIViewController, ARSessionDelegate {
     @IBOutlet var sceneView: ARSCNView!
 
     @IBOutlet weak var blurView: UIVisualEffectView!
-
+    @IBOutlet weak var Button1: UIButton!
+    @IBOutlet weak var Button2: UIButton!
+    @IBOutlet weak var Button3: UIButton!
+    @IBOutlet weak var Button4: UIButton!
+    @IBOutlet weak var Button5: UIButton!
+    @IBOutlet weak var Button6: UIButton!
+    @IBOutlet weak var Button7: UIButton!
+    @IBOutlet weak var Button8: UIButton!
+    @IBOutlet weak var Button9: UIButton!
+    @IBOutlet weak var Button10: UIButton!
+    @IBOutlet weak var Button11: UIButton!
+    @IBOutlet weak var Button12: UIButton!
+    @IBOutlet weak var Button13: UIButton!
+    @IBOutlet weak var Button14: UIButton!
+    @IBOutlet weak var Button15: UIButton!
+    @IBOutlet weak var Button16: UIButton!
+    @IBOutlet weak var Button17: UIButton!
+    @IBOutlet weak var Button18: UIButton!
+    @IBOutlet weak var Button19: UIButton!
+    @IBOutlet weak var Button20: UIButton!
+    @IBOutlet weak var Button21: UIButton!
+    @IBOutlet weak var Button22: UIButton!
+    @IBOutlet weak var Button23: UIButton!
+    @IBOutlet weak var Button24: UIButton!
+    @IBOutlet weak var Button25: UIButton!
+    @IBOutlet weak var Button28: UIButton!
+    @IBOutlet weak var StartButton: UIButton!
+    
+    
+    
     var location = CGPoint(x: 187.0, y: 406.0)
     var clicklocation = CGPoint(x: 187.0, y: 406.0)
     var y = 0.0
     var x = 0.0
     var prey = 0.0
     var prex = 0.0
+    var taskorder = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,28]
     @IBOutlet var cursor: UIImageView!
     @IBOutlet weak var clickPlace: UIImageView!
     
@@ -89,51 +119,145 @@ class ViewController: UIViewController, ARSessionDelegate {
         
         cursor.center = location
     }
-    func movevertical(to: Float){
-        //-0.3~0.2 map 0~812
-        prey = Double(location.y)
-        y = Double(((to + 0.3) * 812)/0.5)
-        if y < 0 {
-            y = 0
-        }
-        else if y > 812 {
-            y = 812
-        }
-        if abs(prey - y) <= 12{
-            
-        }
-        else{
-            location.y = CGFloat(y)
-        }
-        
-        cursor.center = location
-        //print(cursor.center)
-    }
-    func movehorizontal(to: Float){
-        //-0.35~0.35 map 0~375
-        prex = Double(location.x)
-        x = Double(375 - ((to + 0.35) * 375 / 0.7))
-        if x < 0 {
-            x = 0
-        }
-        else if x > 375 {
-            x = 375
-        }
-        if abs(prex - x) <= 7{
-            
-        }
-        else{
-            location.x = CGFloat(x)
-        }
-        location.x = CGFloat(x)
-        cursor.center = location
-        
-    }
+    
+    
+    
     
     lazy var statusViewController: StatusViewController = {
         return childViewControllers.lazy.flatMap({ $0 as? StatusViewController }).first!
     }()
-
+    
+    override func becomeFirstResponder() -> Bool {
+        return true
+    }
+    
+    override var keyCommands: [UIKeyCommand]? {
+        return [
+            UIKeyCommand(input: " ",
+                         modifierFlags: [],
+                         action: #selector(self.clickbutton),
+                         discoverabilityTitle: "Close app")
+        ]
+    }
+    
+    @objc func clickbutton() {
+        print(x,y)
+        if(x >= 36 && x <= 80){
+            if(y >= 52 && y <= 96){
+                Button1.backgroundColor? = .green
+                print("hit")
+            }
+            else if(y >= 161 && y <= 205){
+                Button5.backgroundColor? = .green
+            }
+            else if(y >= 270 && y <= 314){
+                Button9.backgroundColor? = .green
+            }
+            else if(y >= 379 && y <= 423){
+                Button13.backgroundColor? = .green
+            }
+            else if(y >= 488 && y <= 532){
+                Button17.backgroundColor? = .green
+            }
+            else if(y >= 597 && y <= 641){
+                Button21.backgroundColor? = .green
+            }
+            else if(y >= 706 && y <= 750){
+                Button25.backgroundColor? = .green
+            }
+            else{
+                print("missy")
+            }
+        }
+        else if(x >= 122 && x <= 166){
+            if(y >= 52 && y <= 96){
+                Button2.backgroundColor? = .green
+                print("hit")
+            }
+            else if(y >= 161 && y <= 205){
+                Button6.backgroundColor? = .green
+            }
+            else if(y >= 270 && y <= 314){
+                Button10.backgroundColor? = .green
+            }
+            else if(y >= 379 && y <= 423){
+                Button14.backgroundColor? = .green
+            }
+            else if(y >= 488 && y <= 532){
+                Button18.backgroundColor? = .green
+            }
+            else if(y >= 597 && y <= 641){
+                Button22.backgroundColor? = .green
+            }
+            else if(y >= 706 && y <= 750){
+                //Button26.backgroundColor? = .green
+            }
+            else{
+                print("missy")
+            }
+        }
+        else if(x >= 201 && x <= 245){
+            if(y >= 52 && y <= 96){
+                Button3.backgroundColor? = .green
+                print("hit")
+            }
+            else if(y >= 161 && y <= 205){
+                Button7.backgroundColor? = .green
+            }
+            else if(y >= 270 && y <= 314){
+                Button11.backgroundColor? = .green
+            }
+            else if(y >= 379 && y <= 423){
+                Button15.backgroundColor? = .green
+            }
+            else if(y >= 488 && y <= 532){
+                Button19.backgroundColor? = .green
+            }
+            else if(y >= 597 && y <= 641){
+                Button23.backgroundColor? = .green
+            }
+            else if(y >= 706 && y <= 750){
+                //Button27.backgroundColor? = .green
+            }
+            else{
+                print("missy")
+            }
+        }
+        else if(x >= 296 && x <= 340){
+            if(y >= 52 && y <= 96){
+                Button4.backgroundColor? = .green
+                print("hit")
+            }
+            else if(y >= 161 && y <= 205){
+                Button8.backgroundColor? = .green
+            }
+            else if(y >= 270 && y <= 314){
+                Button12.backgroundColor? = .green
+            }
+            else if(y >= 379 && y <= 423){
+                Button16.backgroundColor? = .green
+            }
+            else if(y >= 488 && y <= 532){
+                Button20.backgroundColor? = .green
+            }
+            else if(y >= 597 && y <= 641){
+                Button24.backgroundColor? = .green
+            }
+            else if(y >= 706 && y <= 750){
+                Button28.backgroundColor? = .green
+            }
+            else{
+                print("missy")
+            }
+        }
+        else{
+            print("miss")
+        }
+        
+    }
+    
+    
+    
     // MARK: Properties
 
     /// Convenience accessor for the session owned by ARSCNView.
@@ -151,7 +275,17 @@ class ViewController: UIViewController, ARSessionDelegate {
             contentUpdater.virtualFaceNode = nodeForContentType[selectedVirtualContent]
         }
     }
-
+    func distance(p: Double,b: Double) -> Double {
+        let dis = abs(p - b)
+        return dis
+    }
+    func taskStart() {
+        let r = 22.0
+        
+        if( distance(p: x, b: Double(StartButton.center.x)) > r || distance(p: y, b: Double(StartButton.center.y)) > r ){
+            
+        }
+    }
     // MARK: - View Controller Life Cycle
 
     override func viewDidLoad() {
@@ -159,6 +293,13 @@ class ViewController: UIViewController, ARSessionDelegate {
         
         cursor.center = CGPoint(x: 187.0, y: 406.0)
         print(cursor.center)
+        cursor.layer.borderWidth = 1
+        cursor.layer.masksToBounds = false
+        cursor.layer.borderColor = UIColor.black.cgColor
+        cursor.layer.cornerRadius = cursor.frame.height/2
+        cursor.clipsToBounds = true
+        StartButton.layer.borderWidth = 1
+        StartButton.layer.borderColor = UIColor.black.cgColor
         
         sceneView.delegate = contentUpdater
         sceneView.session.delegate = self
